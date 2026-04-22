@@ -21,7 +21,38 @@ from datetime import datetime
 
 ANCHO = 400
 ALTO = 500
+lista_computadores = []
 
+class ComputadorMantenimiento():
+    def __init__(self, codigo, hora_entrada, valor_entrada):
+        self.__codigo = codigo
+        self.__hora_entrada = hora_entrada
+        self.__valor_hora = valor_entrada
+        self.__hora_salida = None
+
+    def registrar_entrada(self, codigo, valor_entrada,hora):
+        self.__codigo = codigo
+        self.__hora_entrada = hora
+        self.__valor_hora = valor_entrada
+
+    def registrar_salida(self, hora):
+        self.__hora_salida = hora
+        
+    def calcular_valor(self, hora_salida):
+        horaE = self.__hora_entrada
+        objetohoraE = datetime.strptime(horaE, "%H:%M")
+        objetohoraS = datetime.strptime(hora_salida, "%H:%M")
+
+        if objetohoraS < objetohoraE:
+            return -1
+        else:
+            self.registrar_salida(hora_salida)
+            deltaHora = objetohoraS - objetohoraE
+            deltaHoraF = deltaHora.total_seconds() /3600
+            return deltaHoraF*self.__valor_hora
+        
+    def obtener_codigo(self):
+        return self.__codigo
 class Usuario():
     def __init__(self, usuario="", password=""):
         self.__password = password
@@ -38,12 +69,30 @@ class Usuario():
         return self.__usuario
         
 usuario = Usuario()
+
 def DashboardPrincipal():
     global ventanaJAMGDashboard
     ventanaJAMGDashboard = tk.Tk()
-    ventanaJAMGDashboard.title("Aplicación Registro de Computadores")
+    ventanaJAMGDashboard.title("Dashboard - Registro de Computadores")
+    ventanaJAMGDashboard.geometry(f"{ANCHO}x{ALTO}")
+
+    ventanaJAMGDashboard.grid_columnconfigure(0, weight=1)
     etiqueta_saludo_bienvenida = tk.Label(ventanaJAMGDashboard, font=("Times New Roman", 20, "bold"),text=f"Bienvenido {usuario.obtenerUser()}")
     etiqueta_saludo_bienvenida.grid(row=0, column=0, pady= 20)
+    # Sección de entrada
+    seccion_entrada = tk.LabelFrame(ventanaJAMGDashboard, text="Registro de Entrada", padx=10, pady=10)
+    seccion_entrada.grid(row=1, column=0, padx=20, pady=10, sticky="nsew")
+    
+    tk.Label(seccion_entrada, text="Código PC:").grid(row=0, column=0, sticky="w")
+    entry_codigo = tk.Entry(seccion_entrada)
+    entry_codigo.grid(row=0, column=1, sticky="ew", pady=2)
+    
+    
+    # Sección de salida
+    seccion_salida = tk.LabelFrame(ventanaJAMGDashboard, text="Gestión de salida y Cobro", padx=10, pady=10)
+    seccion_salida.grid(row=2, column=0, padx=20, pady=10, sticky="nsew")
+    
+    tk.Label(seccion_salida, text="Computadores en Taller:").grid(row=0, column=0, sticky="w")
     ventanaJAMGDashboard.mainloop()
 
 def PantallaInicial():
@@ -88,24 +137,7 @@ def PantallaInicial():
     etiqueta_informacion_personal.grid(row=6, column=0, pady= 20)
     ventanaJAMGInicioSesion.mainloop()
     
-class ComputadorMantenimiento:
-    def __init__(self, codigo, hora_entrada, valor_entrada):
-        self.__codigo = codigo
-        self.__hora_entrada = hora_entrada
-        self.__valor_hora = valor_entrada
-        
 
-    def registrar_entrada(self, codigo, valor_entrada,hora):
-        self.__codigo = codigo
-        self.__hora_entrada = hora
-        self.__valor_hora = valor_entrada
-
-    def registrar_salida(self, hora_salida):
-        pass
-    def calcular_valor(self, hora_salida):
-        pass
-    def obtener_codigo(self, codigo):
-        pass
 
 
 
