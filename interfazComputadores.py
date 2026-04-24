@@ -68,6 +68,7 @@ class Usuario():
     
     def validar(self, usuario_ingresado, password_ingresada):
         self.__usuario = usuario_ingresado
+        self.__password = password_ingresada
         if ((usuario_ingresado.lower() == "programacion") and (password_ingresada.lower() == "programacion")):
             return True
         else:
@@ -124,7 +125,7 @@ def procesar_salida(listbox_v, entry_h_out):
             lista_computadores.pop(indice)
             listbox_v.delete(indice)
             entry_h_out.delete(0, tk.END)
-            
+
     except ValueError:
         messagebox.showerror("Error", "Formato de hora incorrecto. Usa HH:MM")
 
